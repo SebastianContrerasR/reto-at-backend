@@ -1,15 +1,24 @@
 {
   "$schema": "https://json.schemastore.org/nest-cli",
   "collection": "@nestjs/schematics",
-  "sourceRoot": "apps/flights/src",
+  "sourceRoot": "apps/tickets/src",
   "compilerOptions": {
     "deleteOutDir": true,
     "webpack": true,
-    "tsConfigPath": "apps/flights/tsconfig.app.json"
+    "tsConfigPath": "apps/tickets/tsconfig.app.json"
   },
   "monorepo": true,
   "root": "apps/flights",
   "projects": {
+    "tickets": {
+      "type": "application",
+      "root": "apps/tickets",
+      "entryFile": "main",
+      "sourceRoot": "apps/tickets/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/tickets/tsconfig.app.json"
+      }
+    },
     "flights": {
       "type": "application",
       "root": "apps/flights",

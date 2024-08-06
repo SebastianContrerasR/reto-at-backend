@@ -1,0 +1,29 @@
+import { Controller, Inject } from '@nestjs/common';
+import { MessagePattern, Payload } from '@nestjs/microservices';
+import { PaymentServiceInterface } from '../../services/payment.service.interface';
+
+type AuthorizePaymentMessage = {
+  ticketId: string;
+  amount: number;
+};
+
+type CancelPaymentMessage = {
+  ticketId: string;
+};
+@Controller()
+export class ProcessPaymentController {
+  constructor(
+    @Inject('payment-service') private paymentService: PaymentServiceInterface,
+  ) { }
+
+  @MessagePattern('payments.payment.process')
+  processPayment(@Payload() message: AuthorizePaymentMessage) {
+    return this.paymentService.processPayment(message.ticketId, message.amount);
+  }
+
+  @MessagePattern('payments.payment.cancel')
+  cancel(@Payload() message: CancelPaymentMessage) {
+
+    return this.paymentService.cancelPayment(message.ticketId);
+  }
+}
