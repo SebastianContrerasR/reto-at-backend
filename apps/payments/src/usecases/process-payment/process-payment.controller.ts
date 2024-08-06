@@ -18,11 +18,13 @@ export class ProcessPaymentController {
 
   @MessagePattern('payments.payment.process')
   processPayment(@Payload() message: AuthorizePaymentMessage) {
+    console.info('Payments Service: Process payment');
     return this.paymentService.processPayment(message.ticketId, message.amount);
   }
 
   @MessagePattern('payments.payment.cancel')
   cancel(@Payload() message: CancelPaymentMessage) {
+    console.info('Payments Service: Cancel payment');
 
     return this.paymentService.cancelPayment(message.ticketId);
   }

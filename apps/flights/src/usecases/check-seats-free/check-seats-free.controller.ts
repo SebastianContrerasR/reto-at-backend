@@ -16,6 +16,7 @@ export class CheckProductAvailibityController {
 
   @MessagePattern('check.seats.free')
   checkSeatsFree(@Payload() message: CheckSeatsFreeMessage) {
+    console.info('Flights Service: Check seats free');
     return this.service.checkSeatsFree(message.flightId, message.seatsId);
   }
 }

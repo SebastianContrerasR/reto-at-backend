@@ -26,7 +26,7 @@ export class UpdateStockController {
 
   @MessagePattern('flights.seats.free')
   restockQuantity(@Payload() message: ReserveSeatsMessage) {
-    console.info('Inventory Service: restock quantity');
+    console.info('Flights Service: Free up seats');
 
     this.service.freeUpSeats(message.flightId, message.seatsId);
 
