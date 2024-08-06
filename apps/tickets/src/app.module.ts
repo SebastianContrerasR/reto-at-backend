@@ -12,6 +12,7 @@ import { ReserveSeatsStep } from './usecases/create-ticket/saga/steps/reserve-se
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Ticket } from './entities/ticket';
 import { TicketItem } from './entities/ticket-item';
+import { FlightsController } from './gateway/flight/flight.controller';
 
 @Module({
   imports: [
@@ -55,7 +56,7 @@ import { TicketItem } from './entities/ticket-item';
     }),
     TypeOrmModule.forFeature([Ticket, TicketItem]),
   ],
-  controllers: [CreateTicketController],
+  controllers: [CreateTicketController, FlightsController],
   providers: [
     {
       provide: 'create-ticket-saga',

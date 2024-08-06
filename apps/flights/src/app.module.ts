@@ -1,12 +1,16 @@
 import { Module } from '@nestjs/common';
-import config from './config';
 import { ConfigModule } from '@nestjs/config';
-import { CheckProductAvailibityController } from './usecases/check-seats-free/check-seats-free.controller';
-import { UpdateStockController } from './usecases/reserve-seats/reserve-seats.controller';
-import { SeatService } from './services/seat.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import config from './config';
 import { Flight } from './entities/flight';
 import { Seat } from './entities/seat';
+import { FlightService } from './services/flight/flight.service';
+import { SeatService } from './services/seat/seat.service';
+import { CheckSeatsFreeController } from './usecases/check-seats-free/check-seats-free.controller';
+import { CreateFlightsController } from './usecases/create-flights/create-flights.controller';
+import { FindFlightByIdController } from './usecases/find-flight-by-id/find-flight-by-id.controller';
+import { FindFlightsController } from './usecases/find-flights/find-flights.controller';
+import { ReserveSeatsController } from './usecases/reserve-seats/reserve-seats.controller';
 
 @Module({
   imports: [
@@ -23,11 +27,21 @@ import { Seat } from './entities/seat';
     }),
     TypeOrmModule.forFeature([Flight, Seat]),
   ],
-  controllers: [CheckProductAvailibityController, UpdateStockController],
+  controllers: [
+    CheckSeatsFreeController,
+    ReserveSeatsController,
+    CreateFlightsController,
+    FindFlightsController,
+    FindFlightByIdController
+  ],
   providers: [
     {
       provide: 'seats-service',
       useClass: SeatService,
+    },
+    {
+      provide: 'flight-service',
+      useClass: FlightService,
     },
   ],
 })

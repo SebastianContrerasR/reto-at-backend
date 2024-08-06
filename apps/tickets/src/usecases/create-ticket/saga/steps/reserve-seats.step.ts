@@ -20,9 +20,7 @@ export class ReserveSeatsStep extends Step<Ticket, void> {
     const success = await lastValueFrom(
       this.flightsClient.send('flights.seats.reserve', {
         flightId: ticket.flightId,
-        seatsId: ticket.ticketItems.map((item) => ({
-          id: item.seatCode,
-        })),
+        seatsId: ticket.ticketItems.map((item) => item.seatCode),
       }),
     );
 
@@ -35,9 +33,7 @@ export class ReserveSeatsStep extends Step<Ticket, void> {
     await lastValueFrom(
       this.flightsClient.send('flights.seats.free', {
         flightId: ticket.flightId,
-        seatsId: ticket.ticketItems.map((item) => ({
-          id: item.seatCode,
-        })),
+        seatsId: ticket.ticketItems.map((item) => item.seatCode),
       }),
     );
   }

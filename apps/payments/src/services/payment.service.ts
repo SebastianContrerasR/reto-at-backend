@@ -2,6 +2,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Payment } from '../entities/payment';
 import { PaymentServiceInterface } from './payment.service.interface';
+import { randomUUID } from 'crypto';
 
 export class PaymentService implements PaymentServiceInterface {
   constructor(
@@ -12,6 +13,7 @@ export class PaymentService implements PaymentServiceInterface {
 
     try {
       const payment = new Payment();
+      payment.id = randomUUID();
       payment.ticketId = ticketId;
       payment.amount = amount;
       payment.paymentDate = new Date();
@@ -23,13 +25,17 @@ export class PaymentService implements PaymentServiceInterface {
     }
   }
 
-  async cancelPayment(ticketId: string): Promise<void> {
+  async cancelPayment(ticketId: string): Promise<boolean> {
 
     const payment = await this.paymentRepository.findOneBy({ ticketId: ticketId });
-    if (!payment) return;
+    if (!payment) return false;
     payment.cancel()
-    this.paymentRepository.save(payment)
+    this.paymentRepository.update({
+      id: payment.id,
+    }, {
+      status: payment.status
+    });
 
-    return;
+    return true;
   }
 }

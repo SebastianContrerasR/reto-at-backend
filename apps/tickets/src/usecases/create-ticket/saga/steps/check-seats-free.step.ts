@@ -22,9 +22,7 @@ export class CheckSeatsFreeStep extends Step<Ticket, void> {
     const freeSeats = await lastValueFrom(
       this.flightsClient.send(this.topic, {
         flightId: ticket.flightId,
-        seatsId: ticket.ticketItems.map((item) => ({
-          id: item.seatCode,
-        })),
+        seatsCode: ticket.ticketItems.map((item) => item.seatCode),
       }),
     );
 

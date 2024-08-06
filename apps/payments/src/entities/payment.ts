@@ -1,13 +1,13 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, PrimaryColumn } from 'typeorm';
 export const enum PaymentStatus {
-  AUTHORIZED,
-  CANCELED,
+  AUTHORIZED = 'authorized',
+  CANCELED = 'canceled',
 }
 
 
 @Entity()
 export class Payment {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryColumn('uuid')
   id: string;
 
   @Column()

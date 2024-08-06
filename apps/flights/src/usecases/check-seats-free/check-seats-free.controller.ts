@@ -1,14 +1,14 @@
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import { Controller, Inject } from '@nestjs/common';
-import { SeatServiceInterface } from '../../services/seat.service.interface';
+import { SeatServiceInterface } from '../../services/seat/seat.service.interface';
 
 type CheckSeatsFreeMessage = {
   flightId: string;
-  seatsId: string[];
+  seatsCode: string[];
 };
 
 @Controller()
-export class CheckProductAvailibityController {
+export class CheckSeatsFreeController {
   constructor(
     @Inject('seats-service')
     private readonly service: SeatServiceInterface,
@@ -17,6 +17,6 @@ export class CheckProductAvailibityController {
   @MessagePattern('check.seats.free')
   checkSeatsFree(@Payload() message: CheckSeatsFreeMessage) {
     console.info('Flights Service: Check seats free');
-    return this.service.checkSeatsFree(message.flightId, message.seatsId);
+    return this.service.checkSeatsFree(message.flightId, message.seatsCode);
   }
 }

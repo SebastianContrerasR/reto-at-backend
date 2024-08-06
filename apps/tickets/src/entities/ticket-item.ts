@@ -1,9 +1,9 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import { Entity, PrimaryColumn, Column, ManyToOne } from 'typeorm';
 import { Ticket } from './ticket';
 
 @Entity()
 export class TicketItem {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryColumn('uuid')
   public id: string;
 
   @Column()

@@ -1,6 +1,6 @@
 import { Controller, Inject } from '@nestjs/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
-import { SeatServiceInterface } from '../../services/seat.service.interface';
+import { SeatServiceInterface } from '../../services/seat/seat.service.interface';
 
 type ReserveSeatsMessage = {
   flightId: string;
@@ -8,14 +8,14 @@ type ReserveSeatsMessage = {
 };
 
 @Controller()
-export class UpdateStockController {
+export class ReserveSeatsController {
   constructor(
     @Inject('seats-service')
     private readonly service: SeatServiceInterface,
   ) { }
 
   @MessagePattern('flights.seats.reserve')
-  reduceStockQuantity(@Payload() message: ReserveSeatsMessage) {
+  reserveSeats(@Payload() message: ReserveSeatsMessage) {
     console.info('Flights Service: Reserve seats');
 
     this.service.reserveSeats(message.flightId, message.seatsId);
@@ -25,7 +25,7 @@ export class UpdateStockController {
   }
 
   @MessagePattern('flights.seats.free')
-  restockQuantity(@Payload() message: ReserveSeatsMessage) {
+  freeUpSeats(@Payload() message: ReserveSeatsMessage) {
     console.info('Flights Service: Free up seats');
 
     this.service.freeUpSeats(message.flightId, message.seatsId);

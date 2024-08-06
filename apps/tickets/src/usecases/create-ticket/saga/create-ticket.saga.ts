@@ -10,7 +10,6 @@ import { ReserveSeatsStep } from './steps/reserve-seats.step';
 @Injectable()
 export class CreateTicketSaga {
   private steps: Step<Ticket, void>[] = [];
-  private successfulSteps: Step<Ticket, void>[] = [];
 
   constructor(
     @Inject('create-ticket-step') step1: CreateTicketStep,
@@ -23,14 +22,15 @@ export class CreateTicketSaga {
   }
 
   async execute(ticket: Ticket): Promise<void> {
+    const successfulSteps: Step<Ticket, void>[] = [];
     for (const step of this.steps) {
       try {
         console.info(`Invoking: ${step.name} step...`);
         await step.invoke(ticket);
-        this.successfulSteps.unshift(step);
+        successfulSteps.unshift(step);
       } catch (error) {
         console.error(`Failed Step: ${step.name} !!`);
-        this.successfulSteps.forEach(async (s) => {
+        successfulSteps.forEach(async (s) => {
           console.info(`Rollbacking: ${s.name} ...`);
           await s.withCompenstation(ticket);
         });

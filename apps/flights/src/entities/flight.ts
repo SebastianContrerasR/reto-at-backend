@@ -1,9 +1,9 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, OneToMany, PrimaryColumn } from "typeorm";
 import { Seat } from "./seat";
 
 @Entity()
 export class Flight {
-    @PrimaryGeneratedColumn('uuid')
+    @PrimaryColumn('uuid')
     id: string;
 
     @Column()
@@ -18,7 +18,7 @@ export class Flight {
     @Column()
     arrivalDate: Date;
 
-    @OneToMany(() => Seat, (seat) => seat.flight)
+    @OneToMany(() => Seat, (seat) => seat.flight, { cascade: true })
     seats: Seat[];
 
 }

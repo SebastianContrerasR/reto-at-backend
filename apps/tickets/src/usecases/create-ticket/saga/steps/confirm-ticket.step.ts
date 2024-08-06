@@ -16,13 +16,21 @@ export class ConfirmTicketStep extends Step<Ticket, void> {
 
   invoke(ticket: Ticket): Promise<void> {
     ticket.confirm();
-    this.repository.save(ticket);
+    this.repository.update({
+      id: ticket.id,
+    }, {
+      status: ticket.status
+    });
     return;
   }
 
   withCompenstation(ticket: Ticket): Promise<void> {
     ticket.cancel();
-    this.repository.save(ticket);
+    this.repository.update({
+      id: ticket.id,
+    }, {
+      status: ticket.status
+    });
     return;
   }
 }

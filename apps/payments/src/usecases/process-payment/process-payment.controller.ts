@@ -17,7 +17,7 @@ export class ProcessPaymentController {
   ) { }
 
   @MessagePattern('payments.payment.process')
-  processPayment(@Payload() message: AuthorizePaymentMessage) {
+  process(@Payload() message: AuthorizePaymentMessage) {
     console.info('Payments Service: Process payment');
     return this.paymentService.processPayment(message.ticketId, message.amount);
   }

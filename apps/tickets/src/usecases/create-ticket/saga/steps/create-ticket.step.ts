@@ -14,7 +14,7 @@ export class CreateTicketStep extends Step<Ticket, void> {
     this.name = 'Create Ticket Step';
   }
 
-  invoke(ticket: Ticket): Promise<void> {
+  async invoke(ticket: Ticket): Promise<void> {
     this.repository.save(ticket);
 
     return;
@@ -22,7 +22,11 @@ export class CreateTicketStep extends Step<Ticket, void> {
 
   withCompenstation(ticket: Ticket): Promise<void> {
     ticket.cancel();
-    this.repository.save(ticket);
+    this.repository.update({
+      id: ticket.id,
+    }, {
+      status: ticket.status
+    });
 
     return;
   }

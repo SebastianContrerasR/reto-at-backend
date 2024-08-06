@@ -1,4 +1,4 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryColumn } from 'typeorm';
 import { TicketItem } from './ticket-item';
 
 export enum TicketStatus {
@@ -9,7 +9,7 @@ export enum TicketStatus {
 
 @Entity()
 export class Ticket {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryColumn('uuid')
   public id: string;
 
   @Column()

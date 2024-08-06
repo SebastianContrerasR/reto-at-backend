@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToOne, PrimaryColumn } from "typeorm";
 import { Flight } from "./flight";
 
 export enum SeatStatus {
@@ -8,7 +8,7 @@ export enum SeatStatus {
 
 @Entity()
 export class Seat {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryColumn('uuid')
   id: string;
 
   @Column()
@@ -20,7 +20,7 @@ export class Seat {
   @Column()
   status: string;
 
-  @ManyToOne(() => Flight, (flight) => flight.seats, { cascade: true })
+  @ManyToOne(() => Flight, (flight) => flight.seats)
   flight: Flight;
 
   isFree(): boolean {
