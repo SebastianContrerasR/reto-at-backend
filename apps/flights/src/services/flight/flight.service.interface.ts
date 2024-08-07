@@ -13,4 +13,5 @@ export interface FlightServiceInterface {
   create(createFlight: CreateFlight): Promise<void>;
   findAll(): Promise<Flight[]>;
   findById(flightId: string): Promise<Flight>;
+  findByIdDetails(flightId: string): Promise<Flight>;
 }

@@ -8,9 +8,10 @@ import { FlightService } from './services/flight/flight.service';
 import { SeatService } from './services/seat/seat.service';
 import { CheckSeatsFreeController } from './usecases/check-seats-free/check-seats-free.controller';
 import { CreateFlightsController } from './usecases/create-flights/create-flights.controller';
-import { FindFlightByIdController } from './usecases/find-flight-by-id/find-flight-by-id.controller';
+import { FindFlightByIdDetailsController } from './usecases/find-flight-by-id-details/find-flight-by-id-details.controller';
 import { FindFlightsController } from './usecases/find-flights/find-flights.controller';
 import { ReserveSeatsController } from './usecases/reserve-seats/reserve-seats.controller';
+import { FindFlightByIdController } from './usecases/find-flight-by-id/find-flight-by-id.controller';
 
 @Module({
   imports: [
@@ -32,7 +33,8 @@ import { ReserveSeatsController } from './usecases/reserve-seats/reserve-seats.c
     ReserveSeatsController,
     CreateFlightsController,
     FindFlightsController,
-    FindFlightByIdController
+    FindFlightByIdController,
+    FindFlightByIdDetailsController
   ],
   providers: [
     {

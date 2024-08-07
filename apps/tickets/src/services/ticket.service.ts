@@ -5,10 +5,16 @@ import { CreateTicketSaga } from '../usecases/create-ticket/saga/create-ticket.s
 import { TicketServiceInterface } from './ticket.service.interface';
 import { TicketItem } from '../entities/ticket-item';
 import { randomUUID } from 'crypto';
+import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class TicketService implements TicketServiceInterface {
-  constructor(@Inject('create-ticket-saga') private saga: CreateTicketSaga) { }
+  constructor(
+    @Inject('create-ticket-saga') private saga: CreateTicketSaga,
+    @InjectRepository(Ticket)
+    private ticketRepository: Repository<Ticket>,
+  ) { }
 
   async createTicket(body: CreateTicketDto): Promise<void> {
     const ticket = new Ticket();
@@ -25,7 +31,21 @@ export class TicketService implements TicketServiceInterface {
       return ticketItemEntity;
     });
 
-
     await this.saga.execute(ticket);
+  }
+
+  async findTicketsByUserId(userId: string): Promise<Ticket[]> {
+    return await this.ticketRepository.find({
+      where: {
+        userId,
+      },
+      relations: ['ticketItems'],
+      order: {
+        createdAt: 'DESC',
+        ticketItems: {
+          seatCode: 'ASC'
+        }
+      }
+    });
   }
 }

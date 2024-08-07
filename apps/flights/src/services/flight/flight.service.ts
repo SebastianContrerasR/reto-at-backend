@@ -24,7 +24,7 @@ export class FlightService implements FlightServiceInterface {
     for (let i = 0; i < createFlight.nroSeats; i++) {
       const seat = new Seat();
       seat.id = randomUUID();
-      seat.code = `SEAT${i + 1}`;
+      seat.code = `SEAT${(i + 1).toString().padStart(3, '0')}`;
       seat.price = createFlight.priceSeats;
       seat.status = SeatStatus.FREE;
       flight.seats.push(seat);
@@ -45,7 +45,22 @@ export class FlightService implements FlightServiceInterface {
         where: {
           id,
         },
+      }
+    );
+  }
+
+  async findByIdDetails(id: string): Promise<Flight> {
+    return await this.flightRepository.findOne(
+      {
+        where: {
+          id,
+        },
         relations: ['seats'],
+        order: {
+          seats: {
+            code: 'ASC'
+          }
+        }
       }
     );
   }

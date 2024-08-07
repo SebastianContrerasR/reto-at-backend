@@ -13,6 +13,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Ticket } from './entities/ticket';
 import { TicketItem } from './entities/ticket-item';
 import { FlightsController } from './gateway/flight/flight.controller';
+import { FindTicketsByUserIdController } from './usecases/find-tickets-by-userId/find-tickets-by-userId.controller';
 
 @Module({
   imports: [
@@ -56,7 +57,7 @@ import { FlightsController } from './gateway/flight/flight.controller';
     }),
     TypeOrmModule.forFeature([Ticket, TicketItem]),
   ],
-  controllers: [CreateTicketController, FlightsController],
+  controllers: [CreateTicketController, FlightsController, FindTicketsByUserIdController],
   providers: [
     {
       provide: 'create-ticket-saga',

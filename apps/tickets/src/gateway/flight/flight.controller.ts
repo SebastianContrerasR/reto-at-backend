@@ -41,24 +41,27 @@ export class FlightsController {
         );
 
     }
-
-    @Get(':id')
-    async findById(@Param('id') id: string) {
-        console.info('Flights Service: Find flight by id');
+    @Get(':id/details')
+    async findByIdDetails(@Res() res: Response, @Param('id') id: string) {
+        console.info('Flights Service: Find flight by id Details');
 
         const flight = await lastValueFrom(
-            this.flightsClient.send('flights.flights.find-by-id', { id }),
+            this.flightsClient.send('flights.flights.find-by-id-details', { id }),
         );
 
         console.info(flight);
-
-        return flight;
+        if (!flight?.[0]) {
+            return res.status(HttpStatus.NOT_FOUND).json({
+                message: 'Flight not found',
+            });
+        }
+        return res.status(HttpStatus.OK).json(flight[0]);
     }
 
     async onModuleInit() {
         this.flightsClient.subscribeToResponseOf('flights.flights.create');
         this.flightsClient.subscribeToResponseOf('flights.flights.find-all');
-        this.flightsClient.subscribeToResponseOf('flights.flights.find-by-id');
+        this.flightsClient.subscribeToResponseOf('flights.flights.find-by-id-details');
 
         await this.flightsClient.connect();
     }
