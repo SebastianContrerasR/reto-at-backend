@@ -4,6 +4,12 @@ import { SeatServiceInterface } from '../../services/seat/seat.service.interface
 
 type ReserveSeatsMessage = {
   flightId: string;
+  userId: string;
+  seatsId: string[];
+};
+
+type FreeUpSeatsMessage = {
+  flightId: string;
   seatsId: string[];
 };
 
@@ -20,7 +26,7 @@ export class ReserveSeatsController {
 
     try {
 
-      await this.service.reserveSeats(message.flightId, message.seatsId);
+      await this.service.reserveSeats(message.flightId, message.userId, message.seatsId);
       return { success: true };
     } catch (error) {
 
@@ -29,7 +35,7 @@ export class ReserveSeatsController {
   }
 
   @MessagePattern('flights.seats.free')
-  async freeUpSeats(@Payload() message: ReserveSeatsMessage) {
+  async freeUpSeats(@Payload() message: FreeUpSeatsMessage) {
     console.info('Flights Service: Free up seats', message);
     try {
       await this.service.freeUpSeats(message.flightId, message.seatsId);

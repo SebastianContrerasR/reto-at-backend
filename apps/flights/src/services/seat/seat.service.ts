@@ -29,7 +29,7 @@ export class SeatService implements SeatServiceInterface {
     );
   }
 
-  async reserveSeats(flightId: string, seatsCode: string[]): Promise<void> {
+  async reserveSeats(flightId: string, userId: string, seatsCode: string[]): Promise<void> {
     const seats = await this.seatRepository.find({
       where: {
         code: In(seatsCode),
@@ -47,6 +47,7 @@ export class SeatService implements SeatServiceInterface {
       id: In(seats.map((seat) => seat.id)),
     }, {
       status: SeatStatus.BOOKED,
+      userId,
     });
   }
 
@@ -69,6 +70,7 @@ export class SeatService implements SeatServiceInterface {
       id: In(seats.map((seat) => seat.id)),
     }, {
       status: SeatStatus.FREE,
+      userId: null,
     });
 
   }

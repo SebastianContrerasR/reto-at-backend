@@ -20,6 +20,7 @@ export class ReserveSeatsStep extends Step<Ticket, void> {
     const { success, error } = await lastValueFrom(
       this.flightsClient.send<{ success: boolean, error?: string }>('flights.seats.reserve', {
         flightId: ticket.flightId,
+        userId: ticket.userId,
         seatsId: ticket.ticketItems.map((item) => item.seatCode),
       }),
     );

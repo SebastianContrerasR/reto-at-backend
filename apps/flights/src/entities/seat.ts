@@ -23,6 +23,9 @@ export class Seat {
   @ManyToOne(() => Flight, (flight) => flight.seats)
   flight: Flight;
 
+  @Column({ nullable: true })
+  userId: string;
+
   isFree(): boolean {
     return this.status === SeatStatus.FREE;
   }
