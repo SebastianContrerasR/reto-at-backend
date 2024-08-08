@@ -14,10 +14,14 @@ class Flight {
     arrivalDate: string;
 }
 
+class TicketUser {
+    name: string;
+}
+
 export class FindTicketByUserIdResponseDto {
-    constructor(ticket: Ticket, flight: Flight, userName: string) {
+    constructor(ticket: Ticket, flight: Flight, user: TicketUser) {
         this.id = ticket.id;
-        this.userName = userName;
+        this.user = user;
         this.flight = flight;
         this.createdAt = ticket.createdAt;
         this.status = ticket.status;
@@ -25,7 +29,7 @@ export class FindTicketByUserIdResponseDto {
     }
 
     id: string;
-    userName: string;
+    user: TicketUser;
     flight: Flight;
     createdAt: Date;
     status: string;

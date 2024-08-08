@@ -33,7 +33,7 @@ export class FindTicketsByUserIdController {
         this.flightsClient.send('flights.flights.find-by-id', { id: ticket.flightId }),
       );
 
-      const ticketResponse = new FindTicketByUserIdResponseDto(ticket, flight?.[0], user.name);
+      const ticketResponse = new FindTicketByUserIdResponseDto(ticket, flight?.[0], { name: user.name });
       return ticketResponse;
     }));
 
