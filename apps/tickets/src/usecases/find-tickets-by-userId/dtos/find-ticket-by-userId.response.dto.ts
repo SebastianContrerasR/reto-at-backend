@@ -15,9 +15,9 @@ class Flight {
 }
 
 export class FindTicketByUserIdResponseDto {
-    constructor(ticket: Ticket, flight: Flight) {
+    constructor(ticket: Ticket, flight: Flight, userName: string) {
         this.id = ticket.id;
-        this.userId = ticket.userId;
+        this.userName = userName;
         this.flight = flight;
         this.createdAt = ticket.createdAt;
         this.status = ticket.status;
@@ -25,7 +25,7 @@ export class FindTicketByUserIdResponseDto {
     }
 
     id: string;
-    userId: string;
+    userName: string;
     flight: Flight;
     createdAt: Date;
     status: string;

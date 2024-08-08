@@ -19,16 +19,17 @@ export class CheckSeatsFreeStep extends Step<Ticket, void> {
   }
 
   async invoke(ticket: Ticket): Promise<void> {
-    const freeSeats = await lastValueFrom(
-      this.flightsClient.send(this.topic, {
+    const { success } = await lastValueFrom(
+      this.flightsClient.send<{ success: boolean }>(this.topic, {
         flightId: ticket.flightId,
         seatsCode: ticket.ticketItems.map((item) => item.seatCode),
       }),
     );
+    console.log(this.name, ' Response: ', success, typeof success);
 
-    if (!freeSeats) {
+    if (!success) {
       throw new SeatsAlreadyBookedError(
-        `Seats are already booked`,
+        `Seats not found or already booked`,
       );
     }
   }

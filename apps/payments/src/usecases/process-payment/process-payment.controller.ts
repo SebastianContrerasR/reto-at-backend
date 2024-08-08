@@ -17,15 +17,18 @@ export class ProcessPaymentController {
   ) { }
 
   @MessagePattern('payments.payment.process')
-  process(@Payload() message: AuthorizePaymentMessage) {
+  async process(@Payload() message: AuthorizePaymentMessage) {
     console.info('Payments Service: Process payment');
-    return this.paymentService.processPayment(message.ticketId, message.amount);
+
+    const success = await this.paymentService.processPayment(message.ticketId, message.amount);
+    return { success };
   }
 
   @MessagePattern('payments.payment.cancel')
-  cancel(@Payload() message: CancelPaymentMessage) {
+  async cancel(@Payload() message: CancelPaymentMessage) {
     console.info('Payments Service: Cancel payment');
 
-    return this.paymentService.cancelPayment(message.ticketId);
+    const success = await this.paymentService.cancelPayment(message.ticketId);
+    return { success };
   }
 }

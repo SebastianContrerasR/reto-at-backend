@@ -15,23 +15,16 @@ export class ReserveSeatsController {
   ) { }
 
   @MessagePattern('flights.seats.reserve')
-  reserveSeats(@Payload() message: ReserveSeatsMessage) {
+  async reserveSeats(@Payload() message: ReserveSeatsMessage) {
     console.info('Flights Service: Reserve seats');
-
-    this.service.reserveSeats(message.flightId, message.seatsId);
-    return {
-      success: true,
-    };
+    const success = await this.service.reserveSeats(message.flightId, message.seatsId);
+    return { success };
   }
 
   @MessagePattern('flights.seats.free')
-  freeUpSeats(@Payload() message: ReserveSeatsMessage) {
+  async freeUpSeats(@Payload() message: ReserveSeatsMessage) {
     console.info('Flights Service: Free up seats');
-
-    this.service.freeUpSeats(message.flightId, message.seatsId);
-
-    return {
-      success: true,
-    };
+    const success = await this.service.reserveSeats(message.flightId, message.seatsId);
+    return { success };
   }
 }

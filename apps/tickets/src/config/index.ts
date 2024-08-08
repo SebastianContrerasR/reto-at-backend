@@ -16,6 +16,11 @@ export default () => ({
       groupId: 'flights',
       name: 'flights-kafka-client',
     },
+    auth: {
+      clientId: 'authorization',
+      groupId: 'authorization',
+      name: 'authorization-kafka-client',
+    },
   },
   postgres: {
     host: process.env.POSTGRES_HOST ?? 'localhost',

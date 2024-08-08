@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import { Ticket } from 'apps/tickets/src/entities/ticket';
 import { CheckSeatsFreeStep } from './steps/check-seats-free.step';
 import { CreateTicketStep } from './steps/create-ticket.step';
@@ -25,18 +25,23 @@ export class CreateTicketSaga {
     const successfulSteps: Step<Ticket, void>[] = [];
     for (const step of this.steps) {
       try {
-        console.info(`Invoking: ${step.name} step...`);
+
+        Logger.log(`Current step: ${step.name} step`);
         await step.invoke(ticket);
         successfulSteps.unshift(step);
       } catch (error) {
-        console.error(`Failed Step: ${step.name} !!`);
+
+        Logger.error(`Failed Step: ${step.name}`);
+
         successfulSteps.forEach(async (s) => {
-          console.info(`Rollbacking: ${s.name} ...`);
+
+          Logger.log(`Rollbacking: ${s.name}`);
           await s.withCompenstation(ticket);
         });
+
         throw error;
       }
     }
-    console.info('Ticket Creation Transaction ended successfuly');
+    Logger.log('Ticket Creation Transaction ended successfuly');
   }
 }

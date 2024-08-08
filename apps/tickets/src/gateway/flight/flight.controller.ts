@@ -1,9 +1,10 @@
-import { Body, Controller, Get, HttpStatus, Inject, Param, Post, Res } from '@nestjs/common';
+import { Body, Controller, Get, HttpStatus, Inject, Logger, Param, Post, Res } from '@nestjs/common';
 import { ClientKafka } from '@nestjs/microservices';
 import config from '../../config';
 import { CreateFlightDto } from './dtos/create-flight-dto';
 import { lastValueFrom } from 'rxjs';
 import { Response } from 'express';
+import { FlightResponseDto } from './dtos/flight.response.dto';
 
 @Controller('flights')
 export class FlightsController {
@@ -43,19 +44,18 @@ export class FlightsController {
     }
     @Get(':id/details')
     async findByIdDetails(@Res() res: Response, @Param('id') id: string) {
-        console.info('Flights Service: Find flight by id Details');
+        Logger.log('Flights Service: Find flight by id Details');
 
         const flight = await lastValueFrom(
-            this.flightsClient.send('flights.flights.find-by-id-details', { id }),
+            this.flightsClient.send<FlightResponseDto>('flights.flights.find-by-id-details', { id }),
         );
 
-        console.info(flight);
-        if (!flight?.[0]) {
+        if (!flight) {
             return res.status(HttpStatus.NOT_FOUND).json({
                 message: 'Flight not found',
             });
         }
-        return res.status(HttpStatus.OK).json(flight[0]);
+        return res.status(HttpStatus.OK).json(flight);
     }
 
     async onModuleInit() {

@@ -1,15 +1,14 @@
 import {
   Body,
   Controller,
-  Get,
   GoneException,
   Inject,
   InternalServerErrorException,
-  Post,
+  Post
 } from '@nestjs/common';
-import { CreateTicketDto } from './dtos/create-ticket-dto';
 import { SeatsAlreadyBookedError } from '../../exceptions/seats_already_booked.error';
 import { TicketServiceInterface } from '../../services/ticket.service.interface';
+import { CreateTicketDto } from './dtos/create-ticket-dto';
 
 @Controller('tickets')
 export class CreateTicketController {
@@ -28,10 +27,5 @@ export class CreateTicketController {
       }
       throw new InternalServerErrorException({ message: error });
     }
-  }
-
-  @Get()
-  getHello(): string {
-    return 'Hello World!';
   }
 }

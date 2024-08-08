@@ -2,6 +2,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
 import { Seat, SeatStatus } from '../../entities/seat';
 import { SeatServiceInterface } from './seat.service.interface';
+import { Logger } from '@nestjs/common';
 
 export class SeatService implements SeatServiceInterface {
   constructor(
@@ -10,23 +11,28 @@ export class SeatService implements SeatServiceInterface {
   ) { }
 
   async checkSeatsFree(flightId: string, seatsCode: string[]): Promise<boolean> {
+    try {
 
-    const seats = await this.seatRepository.find({
-      where: {
-        flight: {
-          id: flightId,
-        },
-        code: In(seatsCode),
+      const seats = await this.seatRepository.find({
+        where: {
+          flight: {
+            id: flightId,
+          },
+          code: In(seatsCode),
+        }
+      });
+
+      if (seats.length !== seatsCode.length) {
+        throw new Error('Seats not found');
       }
-    });
 
-    if (seats.length !== seatsCode.length) {
+      return seats.every((seat) =>
+        seat.isFree(),
+      );
+    } catch (error) {
+      Logger.error(error);
       return false;
     }
-
-    return seats.every((seat) =>
-      seat.isFree(),
-    );
   }
 
   async reserveSeats(flightId: string, seatsCode: string[]): Promise<boolean> {
@@ -41,7 +47,7 @@ export class SeatService implements SeatServiceInterface {
       });
 
       if (seats.length !== seatsCode.length) {
-        return false;
+        throw new Error('Seats not found');
       }
 
       await this.seatRepository.update({
@@ -51,6 +57,8 @@ export class SeatService implements SeatServiceInterface {
       });
       return true;
     } catch (error) {
+      Logger.error(error);
+
       return false;
     }
   }
@@ -68,7 +76,7 @@ export class SeatService implements SeatServiceInterface {
       });
 
       if (seats.length !== seatsCode.length) {
-        return false;
+        throw new Error('Seats not found');
       }
 
       await this.seatRepository.update({
@@ -78,6 +86,8 @@ export class SeatService implements SeatServiceInterface {
       });
       return true;
     } catch (error) {
+      Logger.error(error);
+
       return false;
     }
   }

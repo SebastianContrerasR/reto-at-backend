@@ -16,14 +16,16 @@ export class ProcessPaymentStep extends Step<Ticket, void> {
   }
 
   async invoke(ticket: Ticket): Promise<any> {
-    const success = await lastValueFrom(
-      this.paymentClient.send('payments.payment.process', {
+    const { success } = await lastValueFrom(
+      this.paymentClient.send<{ success: boolean }>('payments.payment.process', {
         ticketId: ticket.id,
         amount: ticket.ticketItems.reduce((accumulator: number, item) => {
           return accumulator + item.price;
         }, 0),
       }),
     );
+
+    console.log(this.name, ' Response: ', success, typeof success);
 
     if (!success) {
       throw new PaymentNotSuccessfulError('The payment unsuccessful');

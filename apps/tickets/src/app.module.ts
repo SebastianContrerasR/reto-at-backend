@@ -14,6 +14,7 @@ import { Ticket } from './entities/ticket';
 import { TicketItem } from './entities/ticket-item';
 import { FlightsController } from './gateway/flight/flight.controller';
 import { FindTicketsByUserIdController } from './usecases/find-tickets-by-userId/find-tickets-by-userId.controller';
+import { AuthController } from './gateway/auth/auth.controller';
 
 @Module({
   imports: [
@@ -44,6 +45,19 @@ import { FindTicketsByUserIdController } from './usecases/find-tickets-by-userId
           },
         },
       },
+      {
+        name: config().services.auth.name,
+        transport: Transport.KAFKA,
+        options: {
+          client: {
+            clientId: config().services.tickets.clientId,
+            brokers: [config().broker],
+          },
+          consumer: {
+            groupId: config().services.auth.groupId,
+          },
+        },
+      },
     ]),
     TypeOrmModule.forRoot({
       type: 'postgres',
@@ -57,7 +71,7 @@ import { FindTicketsByUserIdController } from './usecases/find-tickets-by-userId
     }),
     TypeOrmModule.forFeature([Ticket, TicketItem]),
   ],
-  controllers: [CreateTicketController, FlightsController, FindTicketsByUserIdController],
+  controllers: [CreateTicketController, FlightsController, FindTicketsByUserIdController, AuthController],
   providers: [
     {
       provide: 'create-ticket-saga',

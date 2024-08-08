@@ -15,8 +15,9 @@ export class CheckSeatsFreeController {
   ) { }
 
   @MessagePattern('check.seats.free')
-  checkSeatsFree(@Payload() message: CheckSeatsFreeMessage) {
+  async checkSeatsFree(@Payload() message: CheckSeatsFreeMessage) {
     console.info('Flights Service: Check seats free');
-    return this.service.checkSeatsFree(message.flightId, message.seatsCode);
+    const success = await this.service.checkSeatsFree(message.flightId, message.seatsCode);
+    return { success };
   }
 }
