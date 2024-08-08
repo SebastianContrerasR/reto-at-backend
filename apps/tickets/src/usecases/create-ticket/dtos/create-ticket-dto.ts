@@ -4,10 +4,6 @@ import { ApiProperty } from '@nestjs/swagger';
 export class CreateTicketDto {
   @IsString()
   @ApiProperty()
-  userId: string;
-
-  @IsString()
-  @ApiProperty()
   flightId: string;
 
   @IsNotEmpty()

@@ -16,10 +16,10 @@ export class TicketService implements TicketServiceInterface {
     private ticketRepository: Repository<Ticket>,
   ) { }
 
-  async createTicket(body: CreateTicketDto): Promise<void> {
+  async createTicket(body: CreateTicketDto, userId: string): Promise<void> {
     const ticket = new Ticket();
     ticket.id = randomUUID();
-    ticket.userId = body.userId;
+    ticket.userId = userId;
     ticket.flightId = body.flightId;
     ticket.status = TicketStatus.PENDING;
     ticket.createdAt = new Date();
