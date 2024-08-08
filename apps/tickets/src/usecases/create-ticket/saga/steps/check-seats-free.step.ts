@@ -1,10 +1,10 @@
-import { Step } from './step';
 import { Inject, Injectable } from '@nestjs/common';
 import { ClientKafka } from '@nestjs/microservices';
-import { lastValueFrom } from 'rxjs';
-import { Ticket } from 'apps/tickets/src/entities/ticket';
 import config from 'apps/tickets/src/config';
+import { Ticket } from 'apps/tickets/src/entities/ticket';
 import { SeatsAlreadyBookedError } from 'apps/tickets/src/exceptions/seats_already_booked.error';
+import { lastValueFrom } from 'rxjs';
+import { Step } from './step';
 
 @Injectable()
 export class CheckSeatsFreeStep extends Step<Ticket, void> {
@@ -19,8 +19,8 @@ export class CheckSeatsFreeStep extends Step<Ticket, void> {
   }
 
   async invoke(ticket: Ticket): Promise<void> {
-    const { success } = await lastValueFrom(
-      this.flightsClient.send<{ success: boolean }>(this.topic, {
+    const { success, error } = await lastValueFrom(
+      this.flightsClient.send<{ success: boolean, error?: string }>(this.topic, {
         flightId: ticket.flightId,
         seatsCode: ticket.ticketItems.map((item) => item.seatCode),
       }),
@@ -28,9 +28,7 @@ export class CheckSeatsFreeStep extends Step<Ticket, void> {
     console.log(this.name, ' Response: ', success, typeof success);
 
     if (!success) {
-      throw new SeatsAlreadyBookedError(
-        `Seats not found or already booked`,
-      );
+      throw new SeatsAlreadyBookedError(error || 'Seats already booked');
     }
   }
 

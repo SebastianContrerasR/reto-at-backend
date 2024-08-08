@@ -1,17 +1,19 @@
 import {
   Body,
   Controller,
-  GoneException,
   Inject,
   InternalServerErrorException,
   Post,
+  UnprocessableEntityException,
   UseGuards
 } from '@nestjs/common';
-import { SeatsAlreadyBookedError } from '../../exceptions/seats_already_booked.error';
+import { AuthUser, AuthUserType } from '../../decorator/auth-user.decorator';
+import { AuthGuard } from '../../guards/auth.guard';
 import { TicketServiceInterface } from '../../services/ticket.service.interface';
 import { CreateTicketDto } from './dtos/create-ticket-dto';
-import { AuthGuard } from '../../guards/auth.guard';
-import { AuthUser, AuthUserType } from '../../decorator/auth-user.decorator';
+import { SeatsAlreadyBookedError } from '../../exceptions/seats_already_booked.error';
+import { PaymentNotSuccessfulError } from '../../exceptions/payment_not_successful';
+import { ReserveSeatsError } from '../../exceptions/reserve_seats.error';
 
 @Controller('tickets')
 export class CreateTicketController {
@@ -26,10 +28,14 @@ export class CreateTicketController {
     try {
       await this.service.createTicket(body, user.id);
     } catch (error) {
-      if (error instanceof SeatsAlreadyBookedError) {
-        throw new GoneException({ message: error.message });
+      if (
+        error instanceof SeatsAlreadyBookedError ||
+        error instanceof PaymentNotSuccessfulError ||
+        error instanceof ReserveSeatsError
+      ) {
+        throw new UnprocessableEntityException({ message: error.message });
       }
-      throw new InternalServerErrorException({ message: error });
+      throw new InternalServerErrorException({ message: error.message });
     }
   }
 }

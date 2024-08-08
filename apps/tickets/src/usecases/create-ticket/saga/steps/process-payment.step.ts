@@ -16,8 +16,8 @@ export class ProcessPaymentStep extends Step<Ticket, void> {
   }
 
   async invoke(ticket: Ticket): Promise<any> {
-    const { success } = await lastValueFrom(
-      this.paymentClient.send<{ success: boolean }>('payments.payment.process', {
+    const { success, error } = await lastValueFrom(
+      this.paymentClient.send<{ success: boolean, error?: string }>('payments.payment.process', {
         ticketId: ticket.id,
         amount: ticket.ticketItems.reduce((accumulator: number, item) => {
           return accumulator + item.price;
@@ -28,16 +28,21 @@ export class ProcessPaymentStep extends Step<Ticket, void> {
     console.log(this.name, ' Response: ', success, typeof success);
 
     if (!success) {
-      throw new PaymentNotSuccessfulError('The payment unsuccessful');
+      throw new PaymentNotSuccessfulError(`The payment unsuccessful: ${error}`);
     }
   }
 
   async withCompenstation(ticket: Ticket): Promise<any> {
-    await lastValueFrom(
-      this.paymentClient.send('payments.payment.cancel', {
+    const { success, error } = await lastValueFrom(
+      this.paymentClient.send<{ success: boolean, error?: string }>('payments.payment.cancel', {
         ticketId: ticket.id,
       }),
     );
+
+    if (!success) {
+      throw new Error(error);
+    }
+
   }
 
   async onModuleInit() {

@@ -17,8 +17,8 @@ export class ReserveSeatsStep extends Step<Ticket, void> {
   }
 
   async invoke(ticket: Ticket): Promise<any> {
-    const { success } = await lastValueFrom(
-      this.flightsClient.send<{ success: boolean }>('flights.seats.reserve', {
+    const { success, error } = await lastValueFrom(
+      this.flightsClient.send<{ success: boolean, error?: string }>('flights.seats.reserve', {
         flightId: ticket.flightId,
         seatsId: ticket.ticketItems.map((item) => item.seatCode),
       }),
@@ -26,17 +26,21 @@ export class ReserveSeatsStep extends Step<Ticket, void> {
     console.log(this.name, ' Response: ', success, typeof success);
 
     if (!success) {
-      throw new ReserveSeatsError('Seats could not be reserved');
+      throw new ReserveSeatsError(error);
     }
   }
 
   async withCompenstation(ticket: Ticket): Promise<any> {
-    await lastValueFrom(
-      this.flightsClient.send<{ success: boolean }>('flights.seats.free', {
+    const { success, error } = await lastValueFrom(
+      this.flightsClient.send<{ success: boolean, error?: string }>('flights.seats.free', {
         flightId: ticket.flightId,
         seatsId: ticket.ticketItems.map((item) => item.seatCode),
       }),
     );
+
+    if (!success) {
+      throw new Error(error);
+    }
   }
 
   async onModuleInit() {
