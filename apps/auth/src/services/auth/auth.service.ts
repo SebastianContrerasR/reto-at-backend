@@ -29,7 +29,9 @@ export class AuthService implements AuthServiceInterface {
       const payload = { user: userPayload, sub: user.id };
 
       return {
-        userId: user.id,
+        user: {
+          name: user.name,
+        },
         accessToken: this.jwtService.sign(payload)
       };
     }

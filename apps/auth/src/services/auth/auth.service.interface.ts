@@ -5,7 +5,9 @@ export interface UserLogin {
 }
 
 export interface UserToken {
-  userId: string;
+  user: {
+    name: string;
+  }
   accessToken: string;
 }
 
