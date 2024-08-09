@@ -77,7 +77,11 @@ Para ejecutar el proyecto, sigue estos pasos:
    ```bash
    docker compose up -d
    ```
-3. **Iniciar microservicios y gateway**:
+3. **Iniciar microservicios**:
    ```bash
    npm run start:dev:all
    ```
+Se ejecuta en el puerto `http://localhost:3000`
+
+**Importante**
+Este repositoria funciona conjuntamente con: [Frontend](https://github.com/SebastianContrerasR/reto-at-frontend)
