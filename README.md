@@ -1,5 +1,26 @@
 ## **Backend patron saga**
 
+### Ejecución del Proyecto
+
+Para ejecutar el proyecto, sigue estos pasos:
+
+1. **Instalar Dependencias**: Asegúrate de tener todas las dependencias instaladas ejecutando:
+   ```bash
+   npm install
+   ```
+2. **Docker compose**: Docker compose levantara Kafka y las bases de datos de los microservicios.
+   ```bash
+   docker compose up -d
+   ```
+3. **Iniciar microservicios**:
+   ```bash
+   npm run start:dev:all
+   ```
+Se ejecuta en el puerto `http://localhost:3000`
+
+**Importante**
+Este repositoria funciona conjuntamente con: [Frontend](https://github.com/SebastianContrerasR/reto-at-frontend)
+
 ### **Tecnologías Utilizadas**
 
 - **NestJS**: Framework de NodeJS para construir aplicaciones del lado del servidor con una arquitectura modular y escalable.
@@ -64,24 +85,3 @@ La estructura de carpetas organizada por casos de uso ayuda a:
 1. **Segregación de Responsabilidades**: Cada carpeta (por ejemplo, `auth`, `tickets`, `flights`, `payments`) contiene solo los archivos relacionados con una funcionalidad específica, lo que facilita la localización y el mantenimiento del código.
 2. **Modularidad**: La separación clara entre casos de uso permite el desarrollo de cada funcionalidad.
 3. **Escalabilidad**: La estructura modular facilita la adición de nuevas funcionalidades sin afectar el código existente.
-
-### Ejecución del Proyecto
-
-Para ejecutar el proyecto, sigue estos pasos:
-
-1. **Instalar Dependencias**: Asegúrate de tener todas las dependencias instaladas ejecutando:
-   ```bash
-   npm install
-   ```
-2. **Docker compose**: Docker compose levantara Kafka y las bases de datos de los microservicios.
-   ```bash
-   docker compose up -d
-   ```
-3. **Iniciar microservicios**:
-   ```bash
-   npm run start:dev:all
-   ```
-Se ejecuta en el puerto `http://localhost:3000`
-
-**Importante**
-Este repositoria funciona conjuntamente con: [Frontend](https://github.com/SebastianContrerasR/reto-at-frontend)
