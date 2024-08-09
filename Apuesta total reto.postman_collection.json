@@ -1,0 +1,150 @@
+{
+	"info": {
+		"_postman_id": "bfdb5f3c-29cf-4379-8e3c-c68f85f060ed",
+		"name": "Apuesta total reto",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "28280322"
+	},
+	"item": [
+		{
+			"name": "Create ticket",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Im5hbWUiOiJTZWJhc3RpYW4gQ29udHJlcmFzIiwiZW1haWwiOiJwcnVlYmFAcHJ1ZWJhLmNvbSJ9LCJzdWIiOiIwZjFhYzI5Yi04OTY4LTQ3Y2YtOTNhZC1jMzBhNjZiNDRmMTkiLCJpYXQiOjE3MjMxNDU3NDgsImV4cCI6MTcyMzE0OTM0OH0.a8tAdtRJUe7vJ2qjL4KO_Ssn9H6ufnZ7kQpV_M1Ma9Q"
+					}
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"flightId\": \"eae94f05-a2fb-4d2f-b779-035128911190\",\r\n    \"ticketItems\": [\r\n        {\r\n            \"seatCode\": \"SEAT010\",\r\n            \"price\": 100\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{api_url}}/tickets"
+			},
+			"response": []
+		},
+		{
+			"name": "Register User",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Sebastian Contreras\",\r\n    \"email\": \"prueba1@prueba.com\",\r\n    \"password\": \"prueba123\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{api_url}}/auth/register"
+			},
+			"response": []
+		},
+		{
+			"name": "Login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"prueba@prueba.com\",\r\n    \"password\": \"prueba123\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{api_url}}/auth/login"
+			},
+			"response": []
+		},
+		{
+			"name": "Create flight",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"departure\": \"AYACUCHO\",\r\n  \"arrival\": \"LIMA\",\r\n  \"departureDate\": \"2024-08-10T00:00:00.000Z\",\r\n  \"arrivalDate\": \"2024-08-11T00:00:00.000Z\",\r\n  \"nroSeats\": 50,\r\n  \"priceSeats\": 50\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{api_url}}/flights"
+			},
+			"response": []
+		},
+		{
+			"name": "flights",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "{{api_url}}/flights"
+			},
+			"response": []
+		},
+		{
+			"name": "my tickets",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Im5hbWUiOiJTZWJhc3RpYW4gQ29udHJlcmFzIiwiZW1haWwiOiJwcnVlYmFAcHJ1ZWJhLmNvbSJ9LCJzdWIiOiJlZmFlNjhjMS0zYTQ1LTQ1ZjItOGE3NS1hZDVkNWEyMzhjMDAiLCJpYXQiOjE3MjMwODEzMjYsImV4cCI6MTcyMzA4NDkyNn0.BSIAVzV4nZB2RXoC6FwFBPS5qXH5ZVxlwlDLBNUyh5s"
+					}
+				},
+				"method": "GET",
+				"header": [],
+				"url": "{{api_url}}/tickets/me"
+			},
+			"response": []
+		},
+		{
+			"name": "flight by id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "{{api_url}}/flights/eae94f05-a2fb-4d2f-b779-035128911190/details"
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "api_url",
+			"value": "http://localhost:3000",
+			"type": "string"
+		}
+	]
+}
