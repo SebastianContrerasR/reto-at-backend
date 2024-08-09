@@ -8,7 +8,7 @@
     "tsConfigPath": "apps/tickets/tsconfig.app.json"
   },
   "monorepo": true,
-  "root": "apps/flights",
+  "root": "apps/tickets",
   "projects": {
     "tickets": {
       "type": "application",
