@@ -1,73 +1,87 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+## **Backend patron saga**
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+### **Tecnologías Utilizadas**
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+- **NestJS**: Framework de NodeJS para construir aplicaciones del lado del servidor con una arquitectura modular y escalable.
+- **TypeScript**: Lenguaje que agrega tipos estáticos a JavaScript, mejorando la robustez y la mantenibilidad del código.
+- **Postgres**: Sistema de gestión de bases de datos relacional, utilizado para almacenar datos de manera estructurada y consistente.
+- **TypeORM**: ORM para TypeScript y JavaScript que facilita la interacción con bases de datos relacionales.
+- **Passport**: Middleware de autenticación para Node.js, utilizado para implementar estrategias de autenticación como JWT.
+- **Kafka**: Plataforma de mensajería distribuida para la comunicación entre microservicios.
+- **Microservicios de NestJS**: Utilizados para dividir la aplicación en servicios independientes que se comunican entre sí.
 
-## Description
+### **Arquitectura de Microservicios**
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+La arquitectura de microservicios permite dividir la aplicación en componentes independientes, cada uno con una responsabilidad específica. Esto ofrece varios beneficios:
 
-## Installation
+1. **Escalabilidad**: Cada microservicio puede escalar de forma independiente según la demanda.
+2. **Desarrollo Independiente**: Los equipos pueden trabajar en microservicios separados sin interferir en el trabajo de otros equipos.
+3. **Mantenimiento y Actualizaciones**: Facilita la actualización de componentes individuales sin afectar al sistema completo.
 
-```bash
-$ npm install
+#### **Microservicios Implementados**
+
+1. **Auth**: Maneja la autenticación de usuarios, incluyendo login y registro.
+2. **Tickets**: Es el microservicio principal del reto, que orquesta el flujo de creación de tickets y actúa como gateway para otros microservicios.
+3. **Flights**: Gestiona la información sobre vuelos y asientos.
+4. **Payments**: Procesa las transacciones de pago.
+
+### **Patrón SAGA**
+
+El patrón SAGA se utiliza para manejar transacciones distribuidas en una arquitectura de microservicios. En este proyecto, se emplea el patrón SAGA basado en **orquestación**. El microservicio **Tickets** actúa como el orquestador que coordina los pasos del proceso de creación del ticket.
+
+#### **Interfaz de pasos del patron SAGA**
+
+```typescript
+export abstract class Step<T, R> {
+  name: string;
+  abstract invoke(params: T): Promise<R>;
+  abstract withCompenstation(params: T): Promise<R>;
+}
 ```
 
-## Running the app
+#### **Pasos en la Creación del Ticket**
 
-```bash
-# development
-$ npm run start
+1. **Create Ticket**: Crea el ticket con estado `pending`.
+2. **Check Seats Free**: Verifica si los asientos están disponibles. (Consulta al microservicio Flights)
+3. **Reserve Seats**: Reserva los asientos seleccionados. (Consulta al microservicio Flights)
+4. **Process Payment**: Procesa el pago del usuario. (Consulta al microservicio Payments)
+5. **Confirm Ticket**: Actualiza el estado del ticket a `confirm`.
 
-# watch mode
-$ npm run start:dev
+Cada paso tiene una transacción compensatoria en caso de fallo, excepto **Check Seats Free**, que por su naturaleza, no es necesario.
 
-# production mode
-$ npm run start:prod
-```
+### **Principios SOLID**
 
-## Test
+**Cumplimiento de SOLID:**
 
-```bash
-# unit tests
-$ npm run test
+- **Single Responsibility Principle (SRP)**: Cada microservicio tiene una única responsabilidad, lo que facilita su mantenimiento y evolución.
+- **Open/Closed Principle (OCP)**: Los microservicios están diseñados para ser extensibles sin modificar el código existente. Nuevas funcionalidades se pueden agregar mediante nuevos microservicios o módulos.
+- **Dependency Inversion Principle (DIP)**: Los microservicios dependen de abstracciones (interfaces) y no de implementaciones concretas, facilitando la modularidad y el desacoplamiento.
 
-# e2e tests
-$ npm run test:e2e
+**Estructura de Carpetas por Casos de Uso:**
 
-# test coverage
-$ npm run test:cov
-```
+La estructura de carpetas organizada por casos de uso ayuda a:
 
-## Support
+1. **Segregación de Responsabilidades**: Cada carpeta (por ejemplo, `auth`, `tickets`, `flights`, `payments`) contiene solo los archivos relacionados con una funcionalidad específica, lo que facilita la localización y el mantenimiento del código.
+2. **Modularidad**: La separación clara entre casos de uso permite el desarrollo de cada funcionalidad.
+3. **Escalabilidad**: La estructura modular facilita la adición de nuevas funcionalidades sin afectar el código existente.
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+### Ejecución del Proyecto
 
-## Stay in touch
+Para ejecutar el proyecto, sigue estos pasos:
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+1. **Instalar Dependencias**: Asegúrate de tener todas las dependencias instaladas ejecutando:
+   ```bash
+   npm install
+   ```
+2. **Docker compose**: Docker compose levantara Kafka y las bases de datos de los microservicios.
+   ```bash
+   docker compose up -d
+   ```
+3. **Iniciar microservicios**:
+   ```bash
+   npm run start:dev:all
+   ```
+Se ejecuta en el puerto `http://localhost:3000`
 
-## License
-
-Nest is [MIT licensed](LICENSE).
+**Importante**
+Este repositoria funciona conjuntamente con: [Frontend](https://github.com/SebastianContrerasR/reto-at-frontend)
