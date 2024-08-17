@@ -18,6 +18,21 @@ Para ejecutar el proyecto, sigue estos pasos:
    ```
 Se ejecuta en el puerto `http://localhost:3000`
 
+4. Para agregar vuelos: Puedes importar el archivo postman o ejecutar el siguiente curl
+```bash
+curl --location 'http://localhost:3000/flights' \
+--header 'Content-Type: application/json' \
+--data '{
+  "departure": "AYACUCHO",
+  "arrival": "LIMA",
+  "departureDate": "2024-08-20T00:00:00.000Z",
+  "arrivalDate": "2024-08-20T00:40:00.000Z",
+  "nroSeats": 144,
+  "priceSeats": 50
+}
+'
+```
+
 **Importante**
 Este repositoria funciona conjuntamente con: [Frontend](https://github.com/SebastianContrerasR/reto-at-frontend)
 
