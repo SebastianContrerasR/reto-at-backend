@@ -38,6 +38,7 @@ export class TicketService implements TicketServiceInterface {
     return await this.ticketRepository.find({
       where: {
         userId,
+        status: TicketStatus.CONFIRMED,
       },
       relations: ['ticketItems'],
       order: {
