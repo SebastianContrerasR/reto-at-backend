@@ -73,7 +73,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n  \"departure\": \"AYACUCHO\",\r\n  \"arrival\": \"LIMA\",\r\n  \"departureDate\": \"2024-08-10T00:00:00.000Z\",\r\n  \"arrivalDate\": \"2024-08-11T00:00:00.000Z\",\r\n  \"nroSeats\": 50,\r\n  \"priceSeats\": 50\r\n}\r\n",
+					"raw": "{\r\n  \"departure\": \"AYACUCHO\",\r\n  \"arrival\": \"LIMA\",\r\n  \"departureDate\": \"2024-08-20T00:00:00.000Z\",\r\n  \"arrivalDate\": \"2024-08-20T00:40:00.000Z\",\r\n  \"nroSeats\": 144,\r\n  \"priceSeats\": 50\r\n}\r\n",
 					"options": {
 						"raw": {
 							"language": "json"
